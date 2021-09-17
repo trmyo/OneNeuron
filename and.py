@@ -9,7 +9,7 @@ def main(data, modelName, plotName, eta, epochs):
     X, y = prepare_data(df)
     model = Perceptron(eta=eta, epochs=epochs)
     model.fit(X, y)
-    _ = model.total_loss()
+    _ = model.total_loss()   # _ means dummy variable...means will be no display
     save_model(model, filename=modelName)
     save_plot(df, plotName, model)
 
