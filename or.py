@@ -1,11 +1,23 @@
+"""
+author:TRM
+email: 
+"""
+
 from utils.model import Perceptron
 from utils.all_utils import prepare_data, save_plot, save_model
 import pandas as pd
+import os
+import logging  # to display info and saved in log file intead of print command
 
+# asctime= code executed time, levelname=all info happeneing.. module=which module got executed..message=message to print
+logging_str="[%(asctime)s: %(levelname)s: %(module)s] %(message)s"
+log_dir='logs'
+os.makedirs(log_dir,exist_ok=True)
+logging.basicConfig(filename=os.path.join(log_dir,'running_logs.log'),level=logging.INFO, format=logging_str,filemode='a')
 
 def main(data, modelName, plotName, eta, epochs):
     df = pd.DataFrame(data)
-    print(df)
+    logging.info(f"This is actual dataframe {df}")
     X, y = prepare_data(df)
     model = Perceptron(eta=eta, epochs=epochs)
     model.fit(X, y)
@@ -21,5 +33,11 @@ if __name__ == '__main__':
         "y": [0,1,1,1],
     }
     ETA = 0.3 # 0 and 1
-    EPOCHS = 10
-    main(data=OR, modelName="or.model", plotName="or.png", eta=ETA, epochs=EPOCHS)
+    EPOCHS = 100
+    try:
+        logging.info(">>>>>> starting training >>>>>>>")
+        main(data=OR, modelName="or.model", plotName="or.png", eta=ETA, epochs=EPOCHS)
+        logging.info("<<<<<<< training done successfully <<<<<<<<<\n")
+    except Exception as e:
+        logging.exception(e)
+        raise e
